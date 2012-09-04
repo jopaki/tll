@@ -1,0 +1,144 @@
+@CHARSET "UTF-8";
+
+body {
+  font-family: helvetica, sans-serif;
+  background-color: silver;
+}
+
+a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+label {
+  color: blue;
+  cursor: pointer;
+}
+
+input[type=text],input[type=password] {
+  font-size: 16px;
+  padding: 4px;
+  width: 205px;
+}
+
+button {
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  height: 40px;
+}
+
+table {
+}
+
+td {
+}
+
+.glass {
+  position: absolute;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  background-color: #000;
+  opacity: 0.6;
+  /*filter: progid:DXImageTransform.Microsoft.Alpha(opacity=60); NOTE: this doesn't work with CssResource!!!*/
+  /*z-index: 1;  critical to ensure overlaying of relatively positioned elements! */
+}
+
+.glass table {
+  width: 100%;
+  height: 100%;  
+}
+
+.glass td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.throbber {
+  float: left;
+  background-image: url("/throbber.gif");
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 31px;
+  height: 31px;
+  margin-right: 4px;
+}
+
+.loginPanel {
+  background-color: white;
+  margin-top: 100px;
+  width: 400px;
+  border: 4px solid gray;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  padding: 12px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.outerTbl {
+  margin-top: 5px;
+}
+
+.logoPane {
+  padding-right: 10px;
+  border-right: 1px solid silver;
+}
+
+.formPane {
+  padding-left: 10px;  
+}
+
+@sprite .logo {gwt-image: "imgLogo"; }
+
+.title {
+  font-weight: bold;
+  font-size: 28px;
+  color: gray;
+}
+
+.subtitle {
+  font-style: italic;
+}
+
+.statusMsg {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.info {
+  color: navy;
+}
+
+.error {
+  color: red;
+}
+
+.cbRmbrMe {
+  font-size: 14px;
+}
+
+.invalid {
+  color: red;
+  font-size: 11px;
+  font-style: italic;
+}
+
+input.invalid {
+  border: 1px solid red;
+  background-color: pink;
+}
+
+.btnRow {
+  padding-top: 20px;
+}
+
+.submitButton {
+  float: left;
+}
+
+.lnkTgl {
+  float: right;
+  color: gray;
+  font-size: 11px;
+}

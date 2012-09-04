@@ -1,4 +1,8 @@
-<module>
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="Login">
   <inherits name="com.google.gwt.user.User" />
+  <inherits name="com.google.gwt.i18n.I18N" />
+  <inherits name='com.google.gwt.resources.Resources' />
   <inherits name="com.google.gwt.http.HTTP" />
+  <entry-point class='com.tll.client.ui.Login'/>
 </module>
