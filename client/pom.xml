@@ -7,13 +7,14 @@
     <artifactId>tll</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  
+
   <artifactId>tll-client</artifactId>
   <packaging>pom</packaging>
   <name>tll-client</name>
   <description>Contains client modules.</description>
-  
+
   <properties>
+    <gwtCompileStyle>OBF</gwtCompileStyle>
   </properties>
 
   <modules>
@@ -26,8 +27,10 @@
     <module>listing</module>
     <module>login</module>
   </modules>
-  
+
   <build>
+
+    <!-- TODO: verify we still need this since we're no using gwt-maven-plugin globally -->
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -57,6 +60,7 @@
 
     <plugins>
 
+      <!-- GWT maven plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
@@ -64,20 +68,31 @@
           <includes>**/*GWTTest.java</includes>
         </configuration>
         <executions>
-          <execution>
+          <!-- TODO: configure
+            <execution>
+            <id>gwt-test</id>
+            <goals>
+            <goal>test</goal>
+            </goals>
+            <phase>integration-test</phase>
+            <configuration>
+            </configuration>
+            </execution>
+            <execution>
             <phase>test</phase>
             <goals>
-              <goal>test</goal>
+            <goal>test</goal>
             </goals>
             <configuration>
-              <mode>htmlunit</mode>
+            <mode>htmlunit</mode>
             </configuration>
-          </execution>
+            </execution>
+          -->
         </executions>
       </plugin>
-      
+
       <!--
-        currently, gwt surefire driven GWTTest derived tests create these project dirs 
+        currently, gwt surefire driven GWTTest derived tests create these project dirs
         which should be removed during the clean phase.
       -->
       <plugin>
@@ -86,6 +101,7 @@
           <filesets>
             <fileset>
               <directory>.gwt-tmp</directory>
+              <directory>.gwt-log</directory>
               <followSymlinks>false</followSymlinks>
             </fileset>
             <fileset>
@@ -95,27 +111,27 @@
           </filesets>
         </configuration>
       </plugin>
-  
+
       <!-- exclude GWT unit tests from surefire -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-<!--          <useSystemClassLoader>false</useSystemClassLoader>-->
-<!--          <argLine>-Xms128m -Xmx512m -ea</argLine>-->
+          <!-- <useSystemClassLoader>false</useSystemClassLoader> -->
+          <!-- <argLine>-Xms128m -Xmx512m -ea</argLine> -->
           <excludes>
             <exclude>**/*GWTTest.java</exclude>
           </excludes>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
-          <!-- 
-            tweak compile deps analyze routine to not fail on warning since 
-            we sometimes spuriously add tll-*sources.jars as compile time deps 
+          <!--
+            tweak compile deps analyze routine to not fail on warning since
+            we sometimes spuriously add tll-*sources.jars as compile time deps
             which are needed for building the client gwt jar.
           -->
           <execution>
@@ -127,10 +143,106 @@
           </execution>
         </executions>
       </plugin>
-    
+
     </plugins>
+
+    <pluginManagement>
+      <plugins>
+      </plugins>
+    </pluginManagement>
+
   </build>
-  
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <gwtCompileStyle>PRETTY</gwtCompileStyle>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <configuration>
+              <includes>**/*GWTTest.java</includes>
+            </configuration>
+            <executions>
+              <!-- <execution>
+                <id>gwt-test</id>
+                <goals>
+                <goal>test</goal>
+                </goals>
+                <phase>integration-test</phase>
+                <configuration>
+                </configuration>
+                </execution> -->
+              <execution>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <mode>htmlunit</mode>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <configuration>
+              <includes>**/*GWTTest.java</includes>
+            </configuration>
+            <executions>
+              <execution>
+                <id>gwt-compile</id>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <phase>prepare-package</phase>
+                <configuration>
+                  <module>${gwtTargetModule}</module>
+                  <style>${gwtCompileStyle}</style>
+                </configuration>
+              </execution>
+              <!-- <execution>
+                <id>gwt-test</id>
+                <goals>
+                <goal>test</goal>
+                </goals>
+                <phase>integration-test</phase>
+                <configuration>
+                </configuration>
+                </execution> -->
+              <execution>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <mode>htmlunit</mode>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <dependencyManagement>
     <dependencies>
     </dependencies>
@@ -142,7 +254,7 @@
       <artifactId>gwt-user</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -154,5 +266,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
 </project>

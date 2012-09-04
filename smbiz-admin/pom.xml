@@ -99,6 +99,15 @@
             </configuration>
           </execution>
           <execution>
+            <id>gwt-resources</id>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+            </configuration>
+          </execution>
+          <execution>
             <id>gwt-compile</id>
             <goals>
               <goal>compile</goal>
@@ -157,7 +166,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+              <outputDirectory>${webappDirectory}</outputDirectory>
               <resources>
                 <resource>
                   <directory>src/main/webapp</directory>
@@ -217,6 +226,7 @@
                     <versionRange>[2.4.0,)</versionRange>
                     <goals>
                       <goal>i18n</goal>
+                      <goal>resources</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>

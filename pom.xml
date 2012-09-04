@@ -71,6 +71,7 @@
 		<module>service</module>
 		<module>servlet</module>
 		<module>client</module>
+		<module>client-login-testserver</module>
 	</modules>
 
 	<build>

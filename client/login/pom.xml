@@ -11,15 +11,42 @@
   <artifactId>tll-client-login</artifactId>
   <name>tll-client-login</name>
   <description>Provides client side login functionality.</description>
+  <packaging>war</packaging>
+
+  <properties>
+    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+  </properties>
 
   <build>
+    <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
     <plugins>
 
+      <!-- Mark the project for Google Plugin for Eclipse (GPE) -->
+      <plugin>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <downloadSources>true</downloadSources>
+          <downloadJavadocs>false</downloadJavadocs>
+          <wtpversion>2.0</wtpversion>
+          <additionalBuildcommands>
+            <buildCommand>
+              <name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
+            </buildCommand>
+          </additionalBuildcommands>
+          <additionalProjectnatures>
+            <projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
+          </additionalProjectnatures>
+        </configuration>
+      </plugin>
+      
       <!-- GWT Maven Plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <configuration>
+          <runTarget>Login.html</runTarget>
+          <hostedWebapp>${webappDirectory}</hostedWebapp>
         </configuration>
         <executions>
           <execution>
@@ -32,15 +59,15 @@
               <i18nConstantsBundle>com.tll.client.ui.LoginConstants</i18nConstantsBundle>
             </configuration>
           </execution>
-          <!-- <execution>
-            <id>gwt-test</id>
+          <execution>
+            <id>gwt-resources</id>
             <goals>
-            <goal>test</goal>
+              <goal>resources</goal>
             </goals>
-            <phase>integration-test</phase>
+            <phase>process-resources</phase>
             <configuration>
             </configuration>
-            </execution> -->
+          </execution>
         </executions>
       </plugin>
 
@@ -63,6 +90,26 @@
         </executions>
       </plugin>
 
+      <!-- Copy static web files before executing gwt:run -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${webappDirectory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/webapp</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
 
     <pluginManagement>
@@ -81,6 +128,7 @@
                     <versionRange>[2.4.0,)</versionRange>
                     <goals>
                       <goal>i18n</goal>
+                      <goal>resources</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>
@@ -98,33 +146,10 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <!-- 
-    <dependency>
-      <groupId>com.tll</groupId>
-      <artifactId>tll-core</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.tll</groupId>
-      <artifactId>tll-mail</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.tll</groupId>
-      <artifactId>tll-client-ui</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    -->
-
   </dependencies>
 
 </project>
